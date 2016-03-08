@@ -10,7 +10,11 @@
 }
 
 <h2>Contact</h2>
-<form>
+<form method="POST">
+    @if(ViewBag.Message != null)
+    {
+        <div>@ViewBag.Message</div>
+    }
     <div asp-asp-validation-summary="ValidationSummary.ModelOnly"></div>
     
     <label asp-for="Name">Name</label>    
