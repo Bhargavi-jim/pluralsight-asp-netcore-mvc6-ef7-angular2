@@ -39,3 +39,16 @@ You've created a new ASP.NET 5 project. [Learn what's new](http://go.microsoft.c
 *   [Publish to Microsoft Azure Web Apps](http://go.microsoft.com/fwlink/?LinkID=398609)
 
 We would love to hear your [feedback](http://go.microsoft.com/fwlink/?LinkId=518015)
+
+## Cmd sheet
+@powershell -NoProfile -ExecutionPolicy unrestricted -Command "&{$Branch='dev';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.ps1'))}"
+where dnvm
+dnvm upgrade
+dnvm list
+dnvm use 1.0.0-update1 –p
+npm install -g yo grunt-cli generator-aspnet bower
+yo aspnet
+ctrl + shift + p -> dnu restore
+dnx: Run Command
+bower install
+

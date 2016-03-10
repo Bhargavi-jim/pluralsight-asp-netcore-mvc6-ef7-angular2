@@ -3,6 +3,8 @@
     <head>
         <title>The World - @ViewBag.Title</title>
         <meta charset="utf-8" />
+            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="~/css/site.css" />
         <!--<environment names="Development">
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
             <link rel="stylesheet" href="~/css/site.css" />
@@ -15,50 +17,51 @@
         </environment>-->
     </head>
     <body>
-        <div id="sidebar">
-            <img src="~/img/user.jpg" alt="headshot" class="headshot"/>
-            <span id="username">Static username</span>
+        <div class="sidebar">
+            <img src="~/images/ryu_h.jpg" alt="ryu" class="headshot"/>
+            <!--<span id="username">Ryu</span>-->
             <ul class="menu">
                 <li class="active"><a asp-controller="App" asp-action="Index">Index</a></li>                
                 <li><a asp-controller="App" asp-action="About">About</a></li>
                 <li><a asp-controller="App" asp-action="Contact">Contact</a></li>
             </ul>
+        </div>
             
-            <div id="wrapper">
-                <div id="main">
-                    <button id="sidebarToggle">Toggle Menu</button>
-                </div>                
-            </div>
-            <div class="container body-content">
+        <div class="wrapper">
+            <div class="nav">
+                <button id="sidebarToggle">Toggle Menu</button>
+            </div>                
+        
+            <div class="container body-content main">
                 @RenderBody()   <!-- Inject contents of main view here -->
             </div>
-        </div>        
-        <div id="footer">
-            &copy; 2016 My World.
-        </div>
+            
+            <!--<environment names="Development">
+                <script src="~/lib/jquery/dist/jquery-2.1.4.js"></script>
+                <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+                <script src="~/js/site.js" asp-append-version="true"></script>
+            </environment>-->
+            
+            <!--environment names="Staging,Production">
+                <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+                        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                        asp-fallback-test="window.jQuery">
+                </script>
+                <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
+                        asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                        asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+                </script>
+                <script src="~/js/site.min.js" asp-append-version="true"></script>
+            </environment>-->
 
-        <!--<environment names="Development">
             <script src="~/lib/jquery/dist/jquery-2.1.4.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
-        </environment>-->
-        
-        <!--environment names="Staging,Production">
-            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
-                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                    asp-fallback-test="window.jQuery">
-            </script>
-            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
-                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-            </script>
-            <script src="~/js/site.min.js" asp-append-version="true"></script>
-        </environment>-->
-
-        <script src="~/lib/jquery/dist/jquery-2.1.4.js"></script>
-        
-        <!-- Inject scripts where needed -->
-        <!-- Used with atSection -->        
-         @RenderSection("Scripts", required: false) 
-    </body>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+            <!-- Inject scripts where needed -->
+            <!-- Used with atSection -->        
+            @RenderSection("Scripts", required: false)
+            <div class="footer">
+                &copy; 2016 My World
+            </div>
+        </div>         
+    </body>    
 </html>
