@@ -39,31 +39,36 @@ namespace MyWorld
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-               app.UseStaticFiles();
-//             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-//             loggerFactory.AddDebug();
-// 
-//             if (env.IsDevelopment())
-//             {
-//                 app.UseDeveloperExceptionPage();
-//             }
-//             else
-//             {
-//                 app.UseExceptionHandler("/Home/Error");
-//             }
-// 
-//             app.UseIISPlatformHandler();
-// 
+        {            
+            app.UseIISPlatformHandler();
+                           
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
+ 
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
 
-// 
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=App}/{action=Index}/{id?}");
-                        // defaults: new { controller = "App", action = "Index" };
-                });
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+            
+            app.UseRuntimeInfoPage("/info"); 
+            
+            app.UseFileServer();    // Includes both middlewares below in the right order 
+            //app.UseDefaultFiles();
+            //app.UseStaticFiles();   // Files in wwwroot like images, html pages .etc
+
+            // Usually put this after serving static files.
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=App}/{action=Index}/{id?}");
+                    // defaults: new { controller = "App", action = "Index" };
+            });
         }
 
         // Entry point for the application.
