@@ -10,26 +10,37 @@
 }
 
 <h2>Contact</h2>
-<form method="POST">
-    @if(ViewBag.Message != null)
-    {
-        <div>@ViewBag.Message</div>
-    }
-    <div asp-asp-validation-summary="ValidationSummary.ModelOnly"></div>
-    
-    <label asp-for="Name">Name</label>    
-    <input asp-for="Name" />
-    <span asp-validation-for="Name"></span>
-    
-    <label asp-for="Email">Email</label>
-    <input type="email" asp-for="Email" />
-    <span asp-validation-for="Email"></span>    
-    
-    <label asp-for="Message">Message</label>
-    <textarea cols="40" rows="4" asp-for="Message"></textarea>
-    <span asp-validation-for="Message"></span>
-    
-    <div>        
-        <input type="submit" value="Send Message" />
+<div class="row">
+    <div class="col-md-6">
+        <form method="POST">
+            @if(ViewBag.Message != null)
+            {
+                <div>@ViewBag.Message</div>
+            }
+            <div asp-asp-validation-summary="ValidationSummary.ModelOnly"></div>
+            
+            <div class="form-group">
+                <label asp-for="Name">Name</label>    
+                <input class="form-control" asp-for="Name" />
+                <span class="text-muted" asp-validation-for="Name"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Email">Email</label>
+                <input class="form-control" type="email" asp-for="Email" />
+                <span class="text-muted" asp-validation-for="Email"></span>    
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Message">Message</label>
+                <textarea class="form-control" cols="40" rows="4" asp-for="Message"></textarea>
+                <span class="text-muted" asp-validation-for="Message"></span>
+            </div>
+            
+            <div class="form-group">  
+                <input class="btn btn-success" type="submit" value="Send Message" />
+                <a asp-controller="App" asp-action="Index" class="btn btn-default">Cancel</a>
+            </div>
+        </form>
     </div>
-</form>
+</div>

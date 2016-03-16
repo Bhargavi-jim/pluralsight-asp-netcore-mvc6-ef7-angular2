@@ -51,4 +51,5 @@ yo aspnet
 ctrl + shift + p -> dnu restore
 dnx: Run Command
 bower install
+https://docs.npmjs.com/misc/semver
 

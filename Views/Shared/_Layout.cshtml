@@ -4,64 +4,93 @@
         <title>The World - @ViewBag.Title</title>
         <meta charset="utf-8" />
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="~/lib/bootswatch/readable/bootstrap.min.css" />
+            <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
             <link rel="stylesheet" href="~/css/site.css" />
-        <!--<environment names="Development">
-            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-            <link rel="stylesheet" href="~/css/site.css" />
-        </environment>
-        <environment names="Staging,Production">
-            <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
-                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        </environment>-->
     </head>
     <body>
         <div class="sidebar">
             <img src='@Url.Content("~/images/ryu_h.jpg")' alt="ryu" class="headshot"/>
             <!--<span id="username">Ryu</span>-->
-            <ul class="menu">
+            <ul class="nav">
                 <li class="active"><a asp-controller="App" asp-action="Index">Index</a></li>                
                 <li><a asp-controller="App" asp-action="About">About</a></li>
+                <li><a asp-controller="App" asp-action="Particle">Particle</a></li>
                 <li><a asp-controller="App" asp-action="Contact">Contact</a></li>
+                
             </ul>
         </div>
             
         <div class="wrapper">
-            <div class="nav">
-                <button id="sidebarToggle">Toggle Menu</button>
-            </div>                
-        
-            <div class="container body-content main">
-                @RenderBody()   <!-- Inject contents of main view here -->
-            </div>
-            
-            <!--<environment names="Development">
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <!--<ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <button id="sidebarToggle" class="btn btn-primary">
+                                <i class="fa fa-angle-left"></i>
+                            </button>
+                        </li>
+                    </ul>-->
+                    <a asp-controller="App" asp-action="Index" class="navbar-brand">My World</a>
+                    <!--<ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" class="btn btn-sm btn-info">
+                                <i class="fa fa-save"></i>Save
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="btn btn-sm btn-info">
+                                <i class="fa fa-print"></i>Print
+                            </a>
+                        </li>
+                    </ul>-->
+                </div>
+            </nav>
+            <div class="container-fluid">                
+                <div>
+                    @RenderBody()   <!-- Inject contents of main view here -->
+                </div>
                 <script src="~/lib/jquery/dist/jquery-2.1.4.js"></script>
-                <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-                <script src="~/js/site.js" asp-append-version="true"></script>
-            </environment>-->
-            
-            <!--environment names="Staging,Production">
-                <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
-                        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                        asp-fallback-test="window.jQuery">
-                </script>
-                <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
-                        asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                        asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-                </script>
-                <script src="~/js/site.min.js" asp-append-version="true"></script>
-            </environment>-->
-
-            <script src="~/lib/jquery/dist/jquery-2.1.4.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-            <!-- Inject scripts where needed -->
-            <!-- Used with atSection -->        
-            @RenderSection("Scripts", required: false)
-            <div class="footer">
-                &copy; 2016 My World
+                <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>            
             </div>
-        </div>         
-    </body>    
+            
+            @RenderSection("Scripts", required: false)  <!-- Inject scripts where needed, used with atSection -->
+            <div class="footer container-fluid">
+                <div class="navbar navbar-inverse navbar-fixed-bottom">
+                    <h4 class="text-info text-center">&copy; 2016 My World</h4>
+                </div>                
+            </div>
+        </div>
+    </body>
 </html>
+
+<!-- Env Styles -->
+<!--<environment names="Development">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</environment>
+<environment names="Staging,Production">
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
+            asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+            asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+</environment>-->
+
+<!-- Env Script -->
+<!--<environment names="Development">
+    <script src="~/lib/jquery/dist/jquery-2.1.4.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</environment>-->
+
+<!--environment names="Staging,Production">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery">
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
+            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+    </script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+</environment>-->

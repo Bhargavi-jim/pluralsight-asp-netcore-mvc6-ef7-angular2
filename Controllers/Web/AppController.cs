@@ -26,6 +26,11 @@ namespace MyWorld.Controllers.Web
             return View();
         }
         
+        public IActionResult Particle() 
+        {
+            return View();
+        }
+        
         [HttpPost]
         public IActionResult Contact(ContactViewModel model)
         {
