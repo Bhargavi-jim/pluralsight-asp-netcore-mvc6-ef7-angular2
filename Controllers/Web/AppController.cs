@@ -1,5 +1,5 @@
 using Microsoft.AspNet.Mvc;
-using MyWorld.Services;
+using MyWorld.Services.Interfaces;
 using MyWorld.ViewModels;
 
 namespace MyWorld.Controllers.Web 
@@ -7,8 +7,12 @@ namespace MyWorld.Controllers.Web
     public class AppController : Controller
     {
         public readonly IMailService _mailService;
-        public AppController(IMailService mailService) {
+        public readonly IAppSettingService _appSetting;
+        
+        public AppController(IAppSettingService appSetting, IMailService mailService) {
+            
             _mailService = mailService;
+            _appSetting = appSetting;
         }
         
         public IActionResult Index()
@@ -36,7 +40,7 @@ namespace MyWorld.Controllers.Web
         {
             if(ModelState.IsValid)
             {
-                var email = Startup.Configuration["AppSettings:SiteEmailAddress"];
+                var email = _appSetting.GetAppSetting(Common.Constants.SiteEmailAddress);
                 if(string.IsNullOrWhiteSpace(email))
                 {
                     // First param (key) is the name of the property, or empty for object level error.

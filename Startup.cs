@@ -5,13 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using MyWorld.Services;
+using MyWorld.Services.Interfaces;
 
 namespace MyWorld
 {
     public class Startup
     {
-        public static IConfigurationRoot Configuration { get; set; }
-        public Startup(IApplicationEnvironment env) //IHostingEnvironment env)
+        public IConfigurationRoot Configuration { get; set; }
+        public Startup(IApplicationEnvironment env)//IHostingEnvironment env)
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
@@ -30,11 +31,15 @@ namespace MyWorld
             // Add framework services.
             services.AddMvc();
             
+            services.AddSingleton(provider => Configuration);
+            services.AddSingleton<IAppSettingService, AppSettingService>();
+            
 #if DEBUG
-            services.AddScoped<IMailService, DebugMailService>();
+            services.AddScoped<IMailService, DebugMailService>();            
 #else
-            services.AddScoped<IMailService, MailService>();
-#endif
+            services.AddScoped<IMailService, MailService>();            
+#endif           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +53,6 @@ namespace MyWorld
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
             }
             else
             {

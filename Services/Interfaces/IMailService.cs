@@ -1,4 +1,4 @@
-namespace MyWorld.Services
+namespace MyWorld.Services.Interfaces
 {
     public interface IMailService
     {
