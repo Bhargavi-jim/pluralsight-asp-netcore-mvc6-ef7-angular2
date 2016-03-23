@@ -1,9 +1,12 @@
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
+using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
+using MyWorld.Data;
+using MyWorld.Data.Repository;
 using MyWorld.Services;
 using MyWorld.Services.Interfaces;
 
@@ -31,33 +34,40 @@ namespace MyWorld
             // Add framework services.
             services.AddMvc();
             
+            services.AddLogging();
+            
+            // services.AddEntityFramework()
+            //         .AddSqlServer()
+            //         .AddDbContext<WorldContext>(o => o.UseSqlServer(Configuration["Database:Connection"]));
+            
             services.AddSingleton(provider => Configuration);
             services.AddSingleton<IAppSettingService, AppSettingService>();
-            
+            services.AddScoped<IWorldRepository, WorldRepository>();
 #if DEBUG
             services.AddScoped<IMailService, DebugMailService>();            
 #else
             services.AddScoped<IMailService, MailService>();            
-#endif           
-
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {            
             app.UseIISPlatformHandler();
-                           
+            app.UseDeveloperExceptionPage();
+            //app.UseGlobalExceptionHandler();                          
+            
             //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
+            //loggerFactory.AddDebug(LogLevel.Debug);
  
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+            // if (env.IsDevelopment())
+            // {
+            //     app.UseDeveloperExceptionPage();
+            // }
+            // else
+            // {
+            //     app.UseExceptionHandler("/Home/Error");
+            //}
             
             app.UseRuntimeInfoPage("/info"); 
             

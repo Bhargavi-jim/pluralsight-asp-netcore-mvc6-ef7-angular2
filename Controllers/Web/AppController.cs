@@ -1,4 +1,6 @@
+using System.Linq;
 using Microsoft.AspNet.Mvc;
+using MyWorld.Data.Repository;
 using MyWorld.Services.Interfaces;
 using MyWorld.ViewModels;
 
@@ -6,18 +8,20 @@ namespace MyWorld.Controllers.Web
 {
     public class AppController : Controller
     {
-        public readonly IMailService _mailService;
-        public readonly IAppSettingService _appSetting;
-        
-        public AppController(IAppSettingService appSetting, IMailService mailService) {
-            
+        private readonly IMailService _mailService;
+        private readonly IAppSettingService _appSetting;        
+        private readonly IWorldRepository _worldRepository;
+        public AppController(IAppSettingService appSetting, IMailService mailService, IWorldRepository worldRepository)
+        {
             _mailService = mailService;
             _appSetting = appSetting;
+            _worldRepository = worldRepository;
         }
         
         public IActionResult Index()
         {
-            return View();
+            var trips = _worldRepository.GetAllTrips().OrderBy(t => t.Name).ToList();
+            return View(trips);
         }
         
         public IActionResult About() 
