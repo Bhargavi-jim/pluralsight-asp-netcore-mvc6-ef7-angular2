@@ -6,11 +6,11 @@ using Microsoft.Extensions.Logging;
 
 namespace MyWorld.Middlewares
 {
-    public class GlobalExceptionHandler
+    public class GlobalExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public GlobalExceptionHandler(RequestDelegate next)
+        public GlobalExceptionHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
         }

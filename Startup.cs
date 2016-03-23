@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Data.Entity;
@@ -5,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
+using Newtonsoft.Json.Serialization;
+using MyWorld.Common.Profiles;
 using MyWorld.Data;
 using MyWorld.Data.Repository;
 using MyWorld.Services;
@@ -32,7 +35,11 @@ namespace MyWorld
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                    .AddJsonOptions(opt => 
+                    {
+                        opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    });
             
             services.AddLogging();
             
@@ -75,6 +82,11 @@ namespace MyWorld
             //app.UseDefaultFiles();
             //app.UseStaticFiles();   // Files in wwwroot like images, html pages .etc
 
+            Mapper.Initialize(config => 
+            {
+                config.AddProfile<TripProfile>();
+            });
+            
             // Usually put this after serving static files.
             app.UseMvc(routes =>
             {

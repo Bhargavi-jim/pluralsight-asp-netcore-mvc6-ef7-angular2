@@ -6,7 +6,7 @@ namespace MyWorld.Middlewares
     {
         public static IApplicationBuilder UseGlobalExceptionHandler(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<GlobalExceptionHandler>();
+            return builder.UseMiddleware<GlobalExceptionHandlerMiddleware>();
         }
     }
 }
