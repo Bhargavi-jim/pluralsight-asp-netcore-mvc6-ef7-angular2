@@ -1,3 +1,7 @@
+/*
+ * Middleware that returns a nicely formatted and friendly message to the UI.
+ */
+
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
@@ -15,15 +19,22 @@ namespace MyWorld.Middlewares
             _next = next;
         }
 
+        // ToDo:: Format and return nice message to users. 
         public async Task Invoke(HttpContext context, ILoggerFactory logger)
         {
             try
             {
                 await _next(context);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.AddConsole(LogLevel.Debug, true);
+                //if(ex is ...)
+                // else
+//                {
+                    //Response.StatusCode = (int)HttpStatusCode.BadRequest;
+//                }
+                logger.AddConsole(LogLevel.Debug, true);                
+
                 throw;
             }
         }

@@ -12,6 +12,7 @@ using MyWorld.Data;
 using MyWorld.Data.Repository;
 using MyWorld.Services;
 using MyWorld.Services.Interfaces;
+using MyWorld.Data.Storage;
 
 namespace MyWorld
 {
@@ -49,7 +50,10 @@ namespace MyWorld
             
             services.AddSingleton(provider => Configuration);
             services.AddSingleton<IAppSettingService, AppSettingService>();
-            services.AddScoped<IWorldRepository, WorldRepository>();
+            services.AddSingleton<IWorldStorage, WorldStorage>();
+            //services.AddScoped<IWorldRepository, WorldRepository>();
+            services.AddScoped<IWorldRepository, FakeWorldRepository>();
+            
 #if DEBUG
             services.AddScoped<IMailService, DebugMailService>();            
 #else
@@ -85,6 +89,7 @@ namespace MyWorld
             Mapper.Initialize(config => 
             {
                 config.AddProfile<TripProfile>();
+                config.AddProfile<StopProfile>();
             });
             
             // Usually put this after serving static files.

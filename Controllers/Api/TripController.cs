@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Net;
 using AutoMapper;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
 using MyWorld.Data.Repository;
 using MyWorld.ViewModels;
 using TheWorld.Data.Models;
@@ -11,18 +12,23 @@ namespace MyWorld.Controllers.Api
     [Route("api/trips")]
     public class TripController : Controller
     {
-        IWorldRepository _worldRepository;
+        IWorldRepository _repository;
+        ILogger<TripController> _logger;
 
-        public TripController(IWorldRepository worldRepository)
+        public TripController(IWorldRepository repository, ILogger<TripController> logger)
         {
-            _worldRepository = worldRepository;
+            _repository = repository;
+            _logger = logger;
         }
 
         [HttpGet("")]
         public JsonResult Get()
         {
-            var result = _worldRepository.GetAllTrips();
+            _logger.LogInformation("Attempting to get Trips from database");
+            
+            var result = _repository.GetAllTrips();
             var viewModel = Mapper.Map<IEnumerable<TripViewModel>>(result);
+            
             return Json(viewModel);
         }
 
@@ -34,9 +40,14 @@ namespace MyWorld.Controllers.Api
                 var newTrip = Mapper.Map<Trip>(viewModel);  // Do this in the business class
                 
                 // Save to database.. call the facade => business => repository.
+                _logger.LogInformation("Attempting to save Trips to database");
+                _repository.AddTrip(newTrip);
                 
-                Response.StatusCode = (int) HttpStatusCode.Created;
-                return Json(Mapper.Map<TripViewModel>(newTrip));
+                if(_repository.SaveAll())  // EF saves and pushes changes back into newTrip
+                {
+                    Response.StatusCode = (int) HttpStatusCode.Created;
+                    return Json(Mapper.Map<TripViewModel>(newTrip));                    
+                }                
             }
             
             Response.StatusCode = (int) HttpStatusCode.BadRequest;
