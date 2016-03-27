@@ -26,7 +26,16 @@ namespace MyWorld.Data.Storage
                 throw new InvalidOperationException("Tried to add stops to a non-existent trip: ${tripName}");
             }
 
-            stop.Id = stopId;
+            stop.Id = ++stopId;
+            stop.Arrival = DateTime.Now;
+            stop.Longitude = 1.24;  // Sample Longitude
+            stop.Latitude = 4.25;   // Sample Latitude
+            
+            if(trip.Stops == null)
+            {
+                trip.Stops = new List<Stop>();
+            }
+            
             trip.Stops.Add(stop);
             AddTrip(trip);
         }
