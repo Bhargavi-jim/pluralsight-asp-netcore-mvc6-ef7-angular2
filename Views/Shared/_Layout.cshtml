@@ -10,14 +10,22 @@
     </head>
     <body>
         <div class="sidebar">
-            <img src='@Url.Content("~/images/ryu_h.jpg")' alt="ryu" class="headshot"/>
+            @if(User.Identity.IsAuthenticated)
+            {
+                <img src='@Url.Content("~/images/ryu_h.jpg")' alt="ryu" class="headshot"/>
+                <span id="username">@User.Identity.Name</span>
+            }
             <!--<span id="username">Ryu</span>-->
             <ul class="nav">
                 <li class="active"><a asp-controller="App" asp-action="Index">Index</a></li>                
                 <li><a asp-controller="App" asp-action="About">About</a></li>
                 <li><a asp-controller="App" asp-action="Particle">Particle</a></li>
                 <li><a asp-controller="App" asp-action="Contact">Contact</a></li>
-                
+                @if(User.Identity.IsAuthenticated)
+                {
+                    <li><a asp-controller="App" asp-action="Trips">Trips</a></li>
+                    <li><a asp-controller="Auth" asp-action="Logout">Logout</a></li>
+                }                
             </ul>
         </div>
             
@@ -32,8 +40,13 @@
                         </li>
                     </ul>-->
                     <a asp-controller="App" asp-action="Index" class="navbar-brand">My World</a>
-                    <!--<ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right">
                         <li>
+                            <a href="#" class="btn btn-sm btn-info">
+                                <i class="fa fa-sign-in"></i> Login
+                            </a>
+                        </li>
+                        <!--<li>
                             <a href="#" class="btn btn-sm btn-info">
                                 <i class="fa fa-save"></i>Save
                             </a>
@@ -42,15 +55,15 @@
                             <a href="#" class="btn btn-sm btn-info">
                                 <i class="fa fa-print"></i>Print
                             </a>
-                        </li>
-                    </ul>-->
+                        </li>-->
+                    </ul>
                 </div>
             </nav>
             <div class="container-fluid">                
                 <div>
                     @RenderBody()   <!-- Inject contents of main view here -->
                 </div>
-                <script src="~/lib/jquery/dist/jquery-2.1.4.js"></script>
+                <script src="~/lib/jquery/dist/jquery.js"></script>
                 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>            
             </div>
             

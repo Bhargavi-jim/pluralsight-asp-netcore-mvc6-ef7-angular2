@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using MyWorld.Data.Repository;
 using MyWorld.Services.Interfaces;
@@ -20,8 +21,7 @@ namespace MyWorld.Controllers.Web
         
         public IActionResult Index()
         {
-            var trips = _worldRepository.GetAllTrips().OrderBy(t => t.Name).ToList();
-            return View(trips);
+            return View();
         }
         
         public IActionResult About() 
@@ -29,6 +29,12 @@ namespace MyWorld.Controllers.Web
             return View();
         }
         
+        [Authorize]
+        public IActionResult Trips()
+        {
+            var trips = _worldRepository.GetAllTrips().OrderBy(t => t.Name).ToList();
+            return View(trips);
+        }
         public IActionResult Contact() 
         {
             return View();

@@ -13,6 +13,11 @@ using MyWorld.Data.Repository;
 using MyWorld.Services;
 using MyWorld.Services.Interfaces;
 using MyWorld.Data.Storage;
+using MyWorld.Data.Seed;
+using Microsoft.AspNet.Identity.EntityFramework;
+using MyWorld.Data.Models;
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace MyWorld
 {
@@ -36,11 +41,37 @@ namespace MyWorld
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc()
+            services.AddMvc(config =>
+                    {
+#if !DEBUG
+                        config.Filters.Add(new RequireHttpsAttribute());    // Redirect to https. We don't want to send anything not protected over the wire!
+#endif                                    
+                    })
                     .AddJsonOptions(opt => 
                     {
                         opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     });
+            
+            services.AddIdentity<WorldUser, IdentityRole>(config => 
+            {
+                config.User.RequireUniqueEmail = true;
+                config.Password.RequiredLength = 8;
+                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                //config.Cookies.ApplicationCookie.AutomaticAuthenticate = true;
+                //config.Cookies.ApplicationCookie.AutomaticChallenge = false;
+                //config.Cookies.ApplicationCookieAuthenticationScheme = "ApplicationCookie";
+            })
+            .AddEntityFrameworkStores<WorldContext>();  // Store identity entities in WorldContext
+            
+            /* Web api redirect when authorization via [Authorize] attribute fails */            
+            // services.Configure<IdentityOptions>(options=>
+            // {
+            //     options.Cookies.ApplicationCookie.LoginPath = new Microsoft.AspNet.Http.PathString("/Auth/Login");
+            // });            
+            // services.ConfigureCookieAuthentication(config =>
+            // {
+            //     config.LoginPath = "/Auth/Login";
+            // });
             
             services.AddLogging();
             
@@ -62,11 +93,13 @@ namespace MyWorld
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)//, WorldContextSeedData seeder)
         {            
             app.UseIISPlatformHandler();
-            app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();            
             //app.UseGlobalExceptionHandler();                          
+            
+            app.UseIdentity();
             
             //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             //loggerFactory.AddDebug(LogLevel.Debug);
@@ -100,6 +133,8 @@ namespace MyWorld
                     template: "{controller=App}/{action=Index}/{id?}");
                     // defaults: new { controller = "App", action = "Index" };
             });
+            
+            //await seeder.EnsureSeedDataAsync();
         }
 
         // Entry point for the application.
