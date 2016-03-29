@@ -18,10 +18,10 @@ namespace MyWorld.Data.Storage
             stopId = 0;
         }
 
-        public void AddStop(string tripName, Stop stop)
+        public void AddStop(string tripName, Stop stop, string username)
         {            
-            var trip = GetByKey(tripName);
-            if (trip == null)
+            var trip = GetByKey(tripName, username);
+            if (trip == null || !trip.UserName.Equals(username))
             {
                 throw new InvalidOperationException("Tried to add stops to a non-existent trip: ${tripName}");
             }
@@ -43,7 +43,7 @@ namespace MyWorld.Data.Storage
         public void AddTrip(Trip trip)
         {
             trip.Id = ++tripId;
-            var result = GetByKey(trip.Name);
+            var result = GetByKey(trip.Name, trip.UserName);
             if (result != null)
             {
                 trips.Remove(trip.Name);                
@@ -74,11 +74,16 @@ namespace MyWorld.Data.Storage
             });
         }
 
-        public Trip GetByKey(string tripName)
+        public Trip GetByKey(string tripName, string username)
         {
             Trip trip = null;
             trips.TryGetValue(tripName, out trip);
-            return trip;
+            
+            if(trip.UserName.Equals(username))
+            {
+                return trip;
+            }
+            return null;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
 using AutoMapper;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using MyWorld.Data.Repository;
@@ -9,6 +10,7 @@ using TheWorld.Data.Models;
 
 namespace MyWorld.Controllers.Api
 {
+    [Authorize]
     [Route("api/trips")]
     public class TripController : Controller
     {
@@ -26,7 +28,7 @@ namespace MyWorld.Controllers.Api
         {
             _logger.LogInformation("Attempting to get Trips from database");
             
-            var result = _repository.GetAllTrips();
+            var result = _repository.GetUserTrips(User.Identity.Name);
             var viewModel = Mapper.Map<IEnumerable<TripViewModel>>(result);
             
             return Json(viewModel);
@@ -38,6 +40,7 @@ namespace MyWorld.Controllers.Api
             if (ModelState.IsValid)
             {
                 var newTrip = Mapper.Map<Trip>(viewModel);  // Do this in the business class
+                newTrip.UserName = User.Identity.Name;
                 
                 // Save to database.. call the facade => business => repository.
                 _logger.LogInformation("Attempting to save Trips to database");

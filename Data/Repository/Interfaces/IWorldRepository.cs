@@ -6,10 +6,11 @@ namespace MyWorld.Data.Repository
     public interface IWorldRepository
     {
         void AddTrip(Trip newTrip);
-        Trip GetStopsByTripName(string name);
+        void AddStop(string tripName, Stop newStop, string username);
+        Trip GetStopsByTripName(string tripName, string username);
         IEnumerable<Trip> GetAllTrips();
         IEnumerable<Trip> GetAllTripsWithStops();
+        IEnumerable<Trip> GetUserTrips(string name);
         bool SaveAll();
-        void AddStop(string tripName, Stop newStop);
     }
 }

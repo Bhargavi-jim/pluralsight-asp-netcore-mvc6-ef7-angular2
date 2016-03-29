@@ -26,7 +26,7 @@ namespace MyWorld.Controllers.Api
         public JsonResult GetStopsByTripName(string tripName)
         {
             _logger.LogInformation($"Getting stop by trip name: {tripName}.");
-            var result = _repository.GetStopsByTripName(tripName);
+            var result = _repository.GetStopsByTripName(tripName, User.Identity.Name);
 
             if (result == null || result.Stops != null && !result.Stops.Any())
             {
@@ -55,7 +55,7 @@ namespace MyWorld.Controllers.Api
                     _logger.LogInformation($"Attempting to save stops to trip: {tripName}");
                     
                     var newStop = Mapper.Map<Stop>(viewModel);
-                    _repository.AddStop(tripName, newStop);
+                    _repository.AddStop(tripName, newStop, User.Identity.Name);
                     
                     if(_repository.SaveAll())
                     {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyWorld.Data.Storage;
 using TheWorld.Data.Models;
 
@@ -13,9 +14,9 @@ namespace MyWorld.Data.Repository
         {
             _storage = storage;
         }
-        public void AddStop(string tripName, Stop newStop)
+        public void AddStop(string tripName, Stop newStop, string username)
         {
-            _storage.AddStop(tripName, newStop);            
+            _storage.AddStop(tripName, newStop, username);            
         }
 
         public void AddTrip(Trip newTrip)
@@ -33,9 +34,19 @@ namespace MyWorld.Data.Repository
             return _storage.GetAllTripsWithStops();
         }
 
-        public Trip GetStopsByTripName(string name)
+        public Trip GetStopsByTripName(string tripName, string username)
         {
-            return _storage.GetByKey(name);
+            var trip = _storage.GetByKey(tripName, username);
+            if(trip.UserName.Equals(username))
+            {
+                return trip;
+            }
+            return null;
+        }
+
+        public IEnumerable<Trip> GetUserTrips(string username)
+        {
+            return _storage.GetAllTrips().Where(t => t.UserName.Equals(username));   // Remember to make t.Username not nullable in EF. 
         }
 
         public bool SaveAll()

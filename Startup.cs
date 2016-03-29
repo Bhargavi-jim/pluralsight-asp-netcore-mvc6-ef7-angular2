@@ -18,6 +18,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using MyWorld.Data.Models;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Authentication.Cookies;
+using System.Threading.Tasks;
+using System.Net;
 
 namespace MyWorld
 {
@@ -57,6 +60,32 @@ namespace MyWorld
                 config.User.RequireUniqueEmail = true;
                 config.Password.RequiredLength = 8;
                 config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                
+                /*
+                 * Web API
+                 * Return 401 Unauthorized instead of the html when the called by javascript 
+                 */ 
+                config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()  //Callbacks that Identity system allow us to override to change default behaviour
+                {
+                    // Only ever executed when authentication cookie already knows that redirect was in order 
+                    // where an unauthorized call is being redirected. 
+                    OnRedirectToLogin = ctx => 
+                    {
+                        if(ctx.Request.Path.StartsWithSegments("/api") && 
+                           ctx.Response.StatusCode == (int) HttpStatusCode.OK)
+                        {
+                            ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        }                         
+                        else 
+                        {
+                            // Default behaviour
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
+                        
+                        return Task.FromResult(0);
+                    }
+                };
+                
                 //config.Cookies.ApplicationCookie.AutomaticAuthenticate = true;
                 //config.Cookies.ApplicationCookie.AutomaticChallenge = false;
                 //config.Cookies.ApplicationCookieAuthenticationScheme = "ApplicationCookie";
@@ -82,6 +111,8 @@ namespace MyWorld
             services.AddSingleton(provider => Configuration);
             services.AddSingleton<IAppSettingService, AppSettingService>();
             services.AddSingleton<IWorldStorage, WorldStorage>();
+            
+            /* Uncomment this to enable EF */
             //services.AddScoped<IWorldRepository, WorldRepository>();
             services.AddScoped<IWorldRepository, FakeWorldRepository>();
             

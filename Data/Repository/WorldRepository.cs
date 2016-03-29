@@ -17,9 +17,9 @@ namespace MyWorld.Data.Repository
             _logger = logger;
         }
 
-        public void AddStop(string tripName, Stop newStop)
+        public void AddStop(string tripName, Stop newStop, string username)
         {
-            var trip = GetStopsByTripName(tripName);
+            var trip = GetStopsByTripName(tripName, username);
             
             newStop.Order = trip.Stops.Max(s => s.Order) + 1;
             
@@ -84,13 +84,13 @@ namespace MyWorld.Data.Repository
             }
         }
 
-        public Trip GetStopsByTripName(string name)
+        public Trip GetStopsByTripName(string tripName, string username)
         {
-            if(!String.IsNullOrWhiteSpace(name))
+            if(!String.IsNullOrWhiteSpace(tripName) && !String.IsNullOrWhiteSpace(username))
             {
                 return _context.Trips
                                .Include(t => t.Stops)
-                               .Where(t => name.Equals(t.Name))
+                               .Where(t => tripName.Equals(t.Name) && username.Equals(t.UserName))
                                .FirstOrDefault();
             }
             return null;
@@ -99,6 +99,25 @@ namespace MyWorld.Data.Repository
         public bool SaveAll()
         {
             return _context.SaveChanges() > 0;    // Returns number of records changed
+        }
+
+        public IEnumerable<Trip> GetUserTrips(string username)
+        {
+            if(string.IsNullOrWhiteSpace(username))
+            {
+                return Enumerable.Empty<Trip>();                
+            }
+            
+            try
+            {
+                var trips = _context.Trips.Where(t => t.UserName.Equals(username));
+                return trips;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Could not get all trips", ex);
+                throw;
+            }
         }
     }
 }
