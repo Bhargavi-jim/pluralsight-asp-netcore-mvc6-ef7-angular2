@@ -1,5 +1,5 @@
 #My Test Project
 See this site in action @ myproject.savras.net
 
-Just a little experimental site to explore Angular2, Gulp, Yeoman, Geospatial mapping using D2, .NET Core.
+Here's my optimistic project to explore Angular2, LESS, Gulp, Yeoman, .NET Core, Azure Table Store/ MongoDB, & Geospatial mapping using D2.
 
