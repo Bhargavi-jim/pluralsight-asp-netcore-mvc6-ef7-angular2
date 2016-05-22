@@ -6,11 +6,11 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using MyWorld.Data.Repository;
 using MyWorld.ViewModels;
-using TheWorld.Data.Models;
+using MyWorld.Data.Models;
 
 namespace MyWorld.Controllers.Api
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/trips")]
     public class TripController : Controller
     {
@@ -22,7 +22,7 @@ namespace MyWorld.Controllers.Api
             _repository = repository;
             _logger = logger;
         }
-
+        
         [HttpGet("")]
         public JsonResult Get()
         {

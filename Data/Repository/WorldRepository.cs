@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Logging;
-using TheWorld.Data.Models;
+using MyWorld.Data.Models;
 
 namespace MyWorld.Data.Repository
 {
@@ -35,16 +35,6 @@ namespace MyWorld.Data.Repository
         {
             try
             {
-                var trips = new List<Trip>
-                {
-                    new Trip
-                    {
-                        Id = 1,
-                        Name = "Holiday",
-                        Created = new DateTime(),
-                        UserName = "Ironman",
-                    }
-                };
                 return _context.Trips.ToList();
             }
             catch (Exception ex)
@@ -53,29 +43,12 @@ namespace MyWorld.Data.Repository
                 throw;
             }
         }
-
+        
         public IEnumerable<Trip> GetAllTripsWithStops()
         {
             try
-            {
-                var trips = new List<Trip>
-                {
-                    new Trip
-                    {
-                        Id = 1,
-                        Name = "Holiday",
-                        Created = new DateTime(),
-                        UserName = "Ironman",
-                        Stops = new List<Stop>
-                        {
-                            new Stop
-                            {
-
-                            }
-                        }
-                    }
-                };
-                return trips.ToList();
+            {               
+                return _context.Trips.Include(t => t.Stops).ToList();
             }
             catch (Exception ex)
             {

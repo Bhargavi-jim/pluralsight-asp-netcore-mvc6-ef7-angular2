@@ -7,7 +7,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using MyWorld.Data.Repository;
 using MyWorld.ViewModels;
-using TheWorld.Data.Models;
+using MyWorld.Data.Models;
 
 namespace MyWorld.Controllers.Api
 {
@@ -21,7 +21,7 @@ namespace MyWorld.Controllers.Api
             _repository = repository;
             _logger = logger;
         }
-
+        
         [HttpGet("")]
         public JsonResult GetStopsByTripName(string tripName)
         {

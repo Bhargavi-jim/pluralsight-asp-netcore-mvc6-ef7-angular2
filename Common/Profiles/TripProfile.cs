@@ -1,6 +1,6 @@
 using AutoMapper;
 using MyWorld.ViewModels;
-using TheWorld.Data.Models;
+using MyWorld.Data.Models;
 
 namespace MyWorld.Common.Profiles
 {

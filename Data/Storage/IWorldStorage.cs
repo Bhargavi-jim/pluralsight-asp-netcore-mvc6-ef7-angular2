@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using TheWorld.Data.Models;
+using MyWorld.Data.Models;
 
 namespace MyWorld.Data.Storage
 {

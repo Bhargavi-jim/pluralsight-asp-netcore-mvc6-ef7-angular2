@@ -1,6 +1,6 @@
 using System;
 
-namespace TheWorld.Data.Models
+namespace MyWorld.Data.Models
 {
     public class Stop
     {

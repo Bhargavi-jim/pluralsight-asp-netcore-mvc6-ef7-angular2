@@ -27,7 +27,7 @@ namespace MyWorld
     public class Startup
     {
         public IConfigurationRoot Configuration { get; set; }
-        public Startup(IApplicationEnvironment env)//IHostingEnvironment env)
+        public Startup(IApplicationEnvironment env) //IHostingEnvironment env)
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
@@ -45,21 +45,21 @@ namespace MyWorld
         {
             // Add framework services.
             services.AddMvc(config =>
-                    {
+            {
 #if !DEBUG
-                        config.Filters.Add(new RequireHttpsAttribute());    // Redirect to https. We don't want to send anything not protected over the wire!
+                config.Filters.Add(new RequireHttpsAttribute());    // Redirect to https. We don't want to send anything not protected over the wire!
 #endif                                    
-                    })
-                    .AddJsonOptions(opt => 
-                    {
-                        opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    });
-            
+            })
+            .AddJsonOptions(opt => 
+            {
+                opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+        
             services.AddIdentity<WorldUser, IdentityRole>(config => 
             {
                 config.User.RequireUniqueEmail = true;
                 config.Password.RequiredLength = 8;
-                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login"; // Redirect to this page when login fails
                 
                 /*
                  * Web API
@@ -104,17 +104,21 @@ namespace MyWorld
             
             services.AddLogging();
             
-            // services.AddEntityFramework()
-            //         .AddSqlServer()
-            //         .AddDbContext<WorldContext>(o => o.UseSqlServer(Configuration["Database:Connection"]));
+            services.AddEntityFramework()
+                    .AddSqlServer()
+                    .AddDbContext<WorldContext>(o => o.UseSqlServer(Configuration["Database:Connection"]));
             
             services.AddSingleton(provider => Configuration);
             services.AddSingleton<IAppSettingService, AppSettingService>();
             services.AddSingleton<IWorldStorage, WorldStorage>();
             
-            /* Uncomment this to enable EF */
-            //services.AddScoped<IWorldRepository, WorldRepository>();
-            services.AddScoped<IWorldRepository, FakeWorldRepository>();
+            /* Swap between EF and fake */
+            services.AddScoped<IWorldRepository, WorldRepository>();
+            //services.AddScoped<IWorldRepository, FakeWorldRepository>();
+            
+            /* Seed */
+            services.AddTransient<WorldContextSeedData>(); // Guarantees a new instance each request to resolve this. Destroyed fairly quickly.
+            //services.AddScoped<WorldContextSeedData>(); // Reuse an instance of this class everytime this is used.            
             
 #if DEBUG
             services.AddScoped<IMailService, DebugMailService>();            
@@ -124,7 +128,7 @@ namespace MyWorld
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)//, WorldContextSeedData seeder)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, WorldContextSeedData seeder)
         {            
             app.UseIISPlatformHandler();
             app.UseDeveloperExceptionPage();            
@@ -165,7 +169,7 @@ namespace MyWorld
                     // defaults: new { controller = "App", action = "Index" };
             });
             
-            //await seeder.EnsureSeedDataAsync();
+            await seeder.EnsureSeedDataAsync();
         }
 
         // Entry point for the application.

@@ -28,12 +28,12 @@ namespace MyWorld.Controllers.Web
         }
         
         /*
-         * If the user is already logged in, bring the user to the trips page.
+         * If the user tries to access login page but is already logged in, bring the user to the trips page.
          * Otherwise, bring the user to the Login view.
          */
         public IActionResult Login()
         {
-            if(User.Identity.IsAuthenticated)
+            if(User != null && User.Identity != null && User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Trips", "App");
             }
@@ -43,7 +43,7 @@ namespace MyWorld.Controllers.Web
         /*
          * When user is not already logged in, verify that this is a valid login when the user posts the login information.
          */
-         [HttpPost]
+        [HttpPost]
         public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
         {
             if(ModelState.IsValid)

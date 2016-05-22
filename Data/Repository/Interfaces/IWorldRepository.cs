@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using TheWorld.Data.Models;
+using MyWorld.Data.Models;
 
 namespace MyWorld.Data.Repository
 {
@@ -11,6 +11,6 @@ namespace MyWorld.Data.Repository
         IEnumerable<Trip> GetAllTrips();
         IEnumerable<Trip> GetAllTripsWithStops();
         IEnumerable<Trip> GetUserTrips(string name);
-        bool SaveAll();
+        bool SaveAll();        
     }
 }

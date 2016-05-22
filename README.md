@@ -51,6 +51,7 @@ npm install -g yo grunt-cli generator-aspnet bower
 yo aspnet
 ctrl + shift + p -> dnu restore
 dnx: Run Command
+dnx ef migrations add InitialDatabase
 bower install
 https://docs.npmjs.com/misc/semver
 
